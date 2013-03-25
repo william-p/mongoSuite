@@ -1,0 +1,149 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import logging
+
+from docopt import docopt
+import ConfigParser
+import sys, os
+
+from mongoSuite import Node
+from mongoSuite import Instance
+from mongoSuite import Tools
+
+doc = """mongoSuite, 
+
+Usage:
+  mongoSuite init                         [--verbose]
+  mongoSuite node     list                [--verbose]
+  mongoSuite node     status [<node>]     [--verbose]
+  mongoSuite instance list                [--verbose]
+  mongoSuite instance status [<instance>] [--verbose]
+  mongoSuite instance start  <instance>   [--verbose]
+  mongoSuite instance stop   <instance>   [--verbose]
+  mongoSuite -h | --help
+
+Options:
+  -h --help               Show help
+  --verbose               Display debug output
+"""
+args = docopt(doc)
+
+# Init logging
+if args.get('--verbose', False):
+	logger_level = logging.DEBUG
+else:
+	logger_level = logging.INFO
+
+logging.basicConfig(format='%(levelname)s %(name)s: %(message)s')
+logger 	= logging.getLogger('mongoSuite')
+logger.setLevel(logger_level)
+
+logger.debug("Args: \n%s" % args)
+
+main_config_path_default = '~/mongoSuite/etc/mongoSuite.conf'
+main_config_path = os.environ.get('MONGOSUITE_CONF', main_config_path_default)
+
+if main_config_path == '':
+	main_config_path = main_config_path_default
+
+main_config_path = os.path.expanduser(main_config_path)
+
+logger.debug("main_config_path: %s" % main_config_path)
+
+# Make configuration directory
+try:
+	os.mkdir(os.path.dirname(main_config_path))
+except:
+	pass
+
+# Check main configuration file
+if not os.path.exists(main_config_path):
+	logger.info("Impossible to find configuration file '%s', I Create it with default options." % main_config_path)
+	Tools.create_default_config(main_config_path)
+	logger.debug(" + Done")
+
+if args.get('init', False):
+	sys.exit(0)
+
+logger.debug("Open configuration file. (%s)" % main_config_path)
+main_config = ConfigParser.ConfigParser()
+main_config.read(main_config_path)
+
+main_config_sections =  main_config.sections()
+main_config_nodes = 	[section.split('-', 1)[1] for section in main_config_sections if section.split('-')[0] == "node"]
+main_config_instances = [section.split('-', 1)[1] for section in main_config_sections if section.split('-')[0] == "instance"]
+#main_config_replSets =  [section.split('-', 1)[1] for section in main_config_sections if section.split('-')[0] == "replSet"]
+
+logger.debug(" + Sections:  %s" % main_config_sections)
+logger.debug(" + Nodes:     %s" % main_config_nodes)
+logger.debug(" + Instances: %s" % main_config_instances)
+#logger.debug(" + replSet:   %s" % main_config_replSets)
+
+nodes = {}
+for name in main_config_nodes:
+	nodes[name] = Node(main_config=main_config, name=name, logger_level=logger_level)
+	nodes[name].connected
+
+instances = {}
+for name in main_config_instances:
+	node = main_config.get("instance-%s" % name, "node")
+	node = nodes.get(node)
+	instances[name] = Instance(main_config=main_config, node=node, name=name, logger_level=logger_level)
+
+#replSets = {}
+#for name in main_config_replSets:
+#	replSets[name] = name
+
+logger.debug("Parse command line parameters:")
+
+name = None
+items = {}
+item = None
+
+if args.get('node', False):
+	items = nodes
+	name = args.get('<node>', None)
+
+if args.get('instance', False):
+	items = instances
+	name = args.get('<instance>', None)
+
+if name == "all":
+	name = None
+
+logger.debug("Name: %s" % name)
+
+if name:
+	item = items.get(name, None)
+	if not item:
+		logger.error("'%s' not found" % name)
+		sys.exit(1)
+
+logger.debug("Item: %s" % item)
+
+if args.get('list', False):
+	for name in items:
+		print (" + %s" % name)
+
+if args.get('status', False):
+	if item:
+		item.status()
+	else:
+		for name in items:
+			items[name].status()
+			print("")
+
+if args.get('start', False):
+	if item:
+		item.start()
+	else:
+		for name in items:
+			items[name].start()
+
+if args.get('stop', False):
+	if item:
+		item.stop()
+	else:
+		for name in items:
+			items[name].stop()
