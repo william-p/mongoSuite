@@ -109,6 +109,10 @@ if args.get('instance', False):
 	items = instances
 	name = args.get('<instance>', None)
 
+# Sort keys
+item_keys = items.keys()
+item_keys.sort()
+
 if name == "all":
 	name = None
 
@@ -123,14 +127,14 @@ if name:
 logger.debug("Item: %s" % item)
 
 if args.get('list', False):
-	for name in items:
+	for name in item_keys:
 		print (" + %s" % name)
 
 if args.get('status', False):
 	if item:
 		item.status()
 	else:
-		for name in items:
+		for name in item_keys:
 			items[name].status()
 			print("")
 
@@ -138,12 +142,12 @@ if args.get('start', False):
 	if item:
 		item.start()
 	else:
-		for name in items:
+		for name in item_keys:
 			items[name].start()
 
 if args.get('stop', False):
 	if item:
 		item.stop()
 	else:
-		for name in items:
+		for name in item_keys:
 			items[name].stop()
