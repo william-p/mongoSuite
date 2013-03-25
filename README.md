@@ -22,6 +22,20 @@ pip install mongoSuite
 pip install git+https://github.com/william-p/mongoSuite.git
 ```
 
+## Usage
+
+```
+Usage:
+  mongoSuite init                         [--verbose]
+  mongoSuite node     list                [--verbose]
+  mongoSuite node     status [<node>]     [--verbose]
+  mongoSuite instance list                [--verbose]
+  mongoSuite instance status [<instance>] [--verbose]
+  mongoSuite instance start  <instance>   [--verbose]
+  mongoSuite instance stop   <instance>   [--verbose]
+  mongoSuite -h | --help
+```
+
 ## Configuration
 
 For init configuration file, you can run:
