@@ -70,7 +70,7 @@ Thanks to:
 * [MongoDB](http://www.mongodb.org/)
 * [PyMongo](https://github.com/mongodb/mongo-python-driver)
 * [Docopt](http://docopt.org/)
-* [Paramiko](http://www.lag.net/paramiko/)
+* [Paramiko](https://github.com/paramiko/paramiko/)
 * [Capensis](http://www.capensis.fr)
 * My mother ...
 
