@@ -63,5 +63,16 @@ Now, you can configure `mongoSuite` on `~/mongoSuite/etc/mongoSuite.conf`
 
 ![Screenshot 02](https://raw.github.com/william-p/mongoSuite/master/screenshots/02.png)
 
+## Thanks
+
+Thanks to:
+* [Python](http://www.python.org/)
+* [MongoDB](http://www.mongodb.org/)
+* [PyMongo](https://github.com/mongodb/mongo-python-driver)
+* [Docopt](http://docopt.org/)
+* [Paramiko](http://www.lag.net/paramiko/)
+* [Capensis](http://www.capensis.fr)
+* My mother ...
+
 ## License
 License is AGPL3, it fully compatible with [`Canopsis`](https://github.com/capensis/canopsis). See LICENSE.
