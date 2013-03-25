@@ -21,7 +21,7 @@ if sys.argv[-1] == 'publish':
 
 setup(
     name='mongoSuite',
-    version=0.1,
+    version='0.1.1',
     description=u('Manage multiple instances of MongoDB on multiple hosts with one command line tool'),
     #long_description=open('README.rst').read(),
     license=open('LICENSE').read(),
