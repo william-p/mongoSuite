@@ -5,7 +5,7 @@ Manage multiple instances of MongoDB on multiple hosts with one command line too
 
 ## Features
 
-* Deal with many host (node) via SSH
+* Deal with many hosts (nodes) via SSH
 * Create instance of `MongoDB` on nodes
 * Remote start/stop instances
 * Check status of your instances
