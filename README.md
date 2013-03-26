@@ -10,6 +10,10 @@ Manage multiple instances of MongoDB on multiple hosts with one command line too
 * Remote start/stop instances
 * Check status of your instances
 
+## Requirements
+
+You must have MongoDB binaries on all nodes, see: [http://www.mongodb.org/downloads](http://www.mongodb.org/downloads) for download.
+
 ## Installation
 
 ### From PyPI
