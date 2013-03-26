@@ -16,13 +16,15 @@ class Node(object):
 		self.main_config = main_config
 		self.name = name
 
-		mongod_binpath = main_config.get("mongoSuite", "mongod_binpath")
-		mongod_dbpath =  main_config.get("mongoSuite", "mongod_dbpath")
-		mongod_logpath = main_config.get("mongoSuite", "mongod_logpath")
-		mongod_pidpath = main_config.get("mongoSuite", "mongod_pidpath")
+		mongod_binpath =	main_config.get("mongoSuite", "mongod_binpath")
+		mongod_dbpath =		main_config.get("mongoSuite", "mongod_dbpath")
+		mongod_logpath =	main_config.get("mongoSuite", "mongod_logpath")
+		mongod_pidpath =	main_config.get("mongoSuite", "mongod_pidpath")
 
-		mongod_bin = 	 main_config.get("mongoSuite", "mongod_bin")
-		mongod_shell =   main_config.get("mongoSuite", "mongod_shell")
+		mongod_bin =		main_config.get("mongoSuite", "mongod_bin")
+		mongod_shell =		main_config.get("mongoSuite", "mongod_shell")
+
+		timeout =			main_config.get("mongoSuite", "timeout")
 
 		default_config = {
 			'host': 'localhost',
@@ -34,7 +36,8 @@ class Node(object):
 			'mongod_binpath': mongod_binpath,
 			'mongod_dbpath': mongod_dbpath,
 			'mongod_logpath': mongod_logpath,
-			'mongod_pidpath': mongod_pidpath
+			'mongod_pidpath': mongod_pidpath,
+			'timeout': int(timeout)
 		}
 		
 		self.config = get_config(main_config, 'node-%s' % name,default_config)
@@ -66,7 +69,7 @@ class Node(object):
 				self.config['host'],
 				port=self.config['ssh_port'],
 				username=self.config['ssh_user'],
-				timeout=5,
+				timeout=self.config['timeout'],
 				key_filename=self.config['ssh_pkey'])
 
 			self.connected = True

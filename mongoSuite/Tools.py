@@ -13,6 +13,7 @@ mongod_pidpath = ~/mongoSuite/run
 mongod_bin =     ~/mongoSuite/bin/mongod
 mongod_shell =   ~/mongoSuite/bin/mongo
 ssh_pkey =       ~/.ssh/id_rsa
+timeout =        1
 
 [node-Node1]
 host = localhost
@@ -52,9 +53,9 @@ flags = --nojournal --noprealloc
 	conf_file.close()
 
 
-def tcp_ping(host, port):
+def tcp_ping(host, port, timeout=0.5):
 	ping = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-	ping.settimeout(0.5)
+	ping.settimeout(timeout)
 	try:
         	ping.connect((host, int(port)))
 		ping.close()
