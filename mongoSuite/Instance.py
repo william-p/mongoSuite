@@ -29,7 +29,8 @@ class Instance(object):
 			'mongod_logpath': mongod_logpath,
 			'mongod_pidpath': mongod_pidpath,
 			'mongod_dbpath': mongod_dbpath,
-			'managed': True
+			'managed': True,
+			'replset': None
 		}
 		
 		self.pid = None
@@ -49,6 +50,9 @@ class Instance(object):
 		cmd += " --dbpath %s" % self.config['mongod_dbpath']
 		cmd += " --pidfilepath %s" % self.config['mongod_pidpath']
 		cmd += " --port %s" % self.config['port']
+
+		if self.config['replset']:
+			cmd += " --replSet %s " % self.config['replset']
 
 		if self.config['flags']:
 			cmd += " %s " % self.config['flags']
@@ -176,9 +180,19 @@ class Instance(object):
 	def connect(self):
 		if not self.connected:
 			try:
-				self.mclient = Connection(self.node.config['host'], self.config['port'])
+				self.mclient = Connection(self.node.config['host'], self.config['port'], slaveOk=True)
 				self.minfo = self.mclient.server_info()
 				self.connected = True
+
+				if self.config['replset']:
+					try:
+						print self.mclient["admin"].command("isMaster")
+					except Exception as err:
+						print type(err)
+						print err.code
+						self.logger.warning("ReplicaSet is configured but not available: %s" % err)
+						self.config['replset'] = None
+
 				return self.minfo
 
 			except Exception as err:
@@ -205,6 +219,9 @@ class Instance(object):
 			self.connect()
 			
 		if self.connected:
+			if self.config['replset']:
+				cprint(" + replset:", self.config['replset'])
+
 			cprint(" + PID:",			str_state(self.pid, ok=self.pid) )
 			cprint(" + Mongod:", "%s (%s bits, debug: %s)" % (self.minfo.get('version', False), self.minfo.get('bits', ''), self.minfo.get('debug', '')) )
 			dbs = self.mclient.database_names()
