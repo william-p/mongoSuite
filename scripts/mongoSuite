@@ -87,9 +87,12 @@ for name in main_config_nodes:
 
 instances = {}
 for name in main_config_instances:
-	node = main_config.get("instance-%s" % name, "node")
-	node = nodes.get(node)
-	instances[name] = Instance(main_config=main_config, node=node, name=name, logger_level=logger_level)
+	node_name = main_config.get("instance-%s" % name, "node")
+	node = nodes.get(node_name, None)
+	if node:
+		instances[name] = Instance(main_config=main_config, node=node, name=name, logger_level=logger_level)
+	else:
+		logger.warning("Node '%s' not found in configuration file, disable instance '%s'" % (node_name, name))
 
 #replSets = {}
 #for name in main_config_replSets:
