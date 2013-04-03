@@ -3,6 +3,8 @@ mongoSuite
 
 Manage multiple instances of MongoDB on multiple hosts with one command line tool
 
+**Warning:** No production ready, need more tests. Please share your feedbacks :)
+
 ## Features
 
 * Deal with many hosts (nodes) via SSH
