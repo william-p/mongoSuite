@@ -245,7 +245,7 @@ class Instance(object):
 				self.isMaster = self.minfo['isMaster'].get("ismaster", False)
 				self.isArbiter = self.me in self.minfo['isMaster'].get("arbiters", [])
 
-				self.isPrimary = self.me == self.minfo['isMaster'].get("primary", None)
+				self.isPrimary = self.me == self.minfo['isMaster'].get("primary", 'noOne')
 
 				self.isSecondary = self.minfo['isMaster'].get("secondary", False)
 
