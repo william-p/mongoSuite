@@ -16,13 +16,13 @@ class Node(object):
 		self.main_config = main_config
 		self.name = name
 
-		mongod_binpath =	main_config.get("mongoSuite", "mongod_binpath")
-		mongod_dbpath =		main_config.get("mongoSuite", "mongod_dbpath")
-		mongod_logpath =	main_config.get("mongoSuite", "mongod_logpath")
-		mongod_pidpath =	main_config.get("mongoSuite", "mongod_pidpath")
+		mongo_binpath =	main_config.get("mongoSuite", "mongo_binpath")
+		mongo_dbpath =		main_config.get("mongoSuite", "mongo_dbpath")
+		mongo_logpath =	main_config.get("mongoSuite", "mongo_logpath")
+		mongo_pidpath =	main_config.get("mongoSuite", "mongo_pidpath")
 
-		mongod_bin =		main_config.get("mongoSuite", "mongod_bin")
-		mongod_shell =		main_config.get("mongoSuite", "mongod_shell")
+		mongo_dbin =		main_config.get("mongoSuite", "mongo_dbin")
+		mongo_shell =		main_config.get("mongoSuite", "mongo_shell")
 
 		timeout =			main_config.get("mongoSuite", "timeout")
 
@@ -31,12 +31,12 @@ class Node(object):
 			'ssh_user': os.environ['USER'],
 			'ssh_port': 22,
 			'ssh_pkey': main_config.get("mongoSuite", "ssh_pkey"),
-			'mongod_shell': mongod_shell,
-			'mongod_bin': mongod_bin,
-			'mongod_binpath': mongod_binpath,
-			'mongod_dbpath': mongod_dbpath,
-			'mongod_logpath': mongod_logpath,
-			'mongod_pidpath': mongod_pidpath,
+			'mongo_shell': mongo_shell,
+			'mongo_dbin': mongo_dbin,
+			'mongo_binpath': mongo_binpath,
+			'mongo_dbpath': mongo_dbpath,
+			'mongo_logpath': mongo_logpath,
+			'mongo_pidpath': mongo_pidpath,
 			'timeout': int(timeout)
 		}
 		
@@ -50,7 +50,7 @@ class Node(object):
 		self.home_dir = None
 		self.states = {}
 
-		self.logger.debug('Config: %s' % self.config)
+		#self.logger.debug('Config: %s' % self.config)
 
 	def connect(self):
 		if self.ssh_error:
@@ -105,20 +105,20 @@ class Node(object):
 		self.home_dir = self.exec_command("echo $HOME")
 
 		# Expand User
-		for key in ['mongod_shell', 'mongod_bin', 'mongod_binpath', 'mongod_dbpath', 'mongod_logpath', 'mongod_pidpath']:
+		for key in ['mongo_shell', 'mongo_dbin', 'mongo_binpath', 'mongo_dbpath', 'mongo_logpath', 'mongo_pidpath']:
 			self.config[key] = self.expanduser(self.config[key])
 
-		self.logger.debug(" + %s" % self.config['mongod_binpath'])
-		self.exec_command("mkdir -p %s" % self.config['mongod_binpath'])
+		self.logger.debug(" + %s" % self.config['mongo_binpath'])
+		self.exec_command("mkdir -p %s" % self.config['mongo_binpath'])
 
-		self.logger.debug(" + %s" % self.config['mongod_dbpath'])
-		self.exec_command("mkdir -p %s" % self.config['mongod_dbpath'])
+		self.logger.debug(" + %s" % self.config['mongo_dbpath'])
+		self.exec_command("mkdir -p %s" % self.config['mongo_dbpath'])
 
-		self.logger.debug(" + %s" % self.config['mongod_logpath'])
-		self.exec_command("mkdir -p %s" % self.config['mongod_logpath'])
+		self.logger.debug(" + %s" % self.config['mongo_logpath'])
+		self.exec_command("mkdir -p %s" % self.config['mongo_logpath'])
 
-		self.logger.debug(" + %s" % self.config['mongod_pidpath'])
-		self.exec_command("mkdir -p %s" % self.config['mongod_pidpath'])
+		self.logger.debug(" + %s" % self.config['mongo_pidpath'])
+		self.exec_command("mkdir -p %s" % self.config['mongo_pidpath'])
 
 	def exec_command(self, command):
 
@@ -178,8 +178,8 @@ class Node(object):
 			self.connect()
 
 		self.states['ssh'] = self.connected
-		self.states['mongod_bin'] = self.file_exist(self.config['mongod_bin'])
-		self.states['mongod_shell'] = self.file_exist(self.config['mongod_shell'])
+		self.states['mongo_dbin'] = self.file_exist(self.config['mongo_dbin'])
+		self.states['mongo_shell'] = self.file_exist(self.config['mongo_shell'])
 
 		for key in self.states:
 			state &= bool(self.states[key])
@@ -194,8 +194,8 @@ class Node(object):
 		if not self.config['host'] == 'localhost':
 			cprint(" + Ssh:", str_state(self.states['ssh'], ok="Online", nok="Offline"))
 
-		cprint(" + Mongod Binary:",	str_state(self.states['mongod_bin']) )
-		cprint(" + Mongod Shell:",	str_state(self.states['mongod_shell']) )
+		cprint(" + Mongod Binary:",	str_state(self.states['mongo_dbin']) )
+		cprint(" + Mongod Shell:",	str_state(self.states['mongo_shell']) )
 
 		if self.connected:
 			cprint(" + OS:", self.exec_command('uname -a'))

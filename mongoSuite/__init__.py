@@ -4,3 +4,4 @@
 import Tools
 from Node import Node
 from Instance import Instance
+from ReplSet import ReplSet

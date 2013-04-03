@@ -6,36 +6,24 @@ import socket
 def create_default_config(path):
 	config = """
 [mongoSuite]
-mongod_binpath = ~/mongoSuite/bin
-mongod_dbpath =  ~/mongoSuite/data
-mongod_logpath = ~/mongoSuite/log
-mongod_pidpath = ~/mongoSuite/run
-mongod_bin =     ~/mongoSuite/bin/mongod
-mongod_shell =   ~/mongoSuite/bin/mongo
+mongo_binpath =  ~/mongoSuite/bin
+mongo_dbpath =   ~/mongoSuite/data
+mongo_logpath =  ~/mongoSuite/log
+mongo_pidpath =  ~/mongoSuite/run
+mongo_dbin =     ~/mongoSuite/bin/mongod
+mongo_sbin =     ~/mongoSuite/bin/mongos
+mongo_shell =    ~/mongoSuite/bin/mongo
 ssh_pkey =       ~/.ssh/id_rsa
 timeout =        1
 
 [node-Node1]
 host = localhost
 
-[node-Node2]
-host = localhost
-
-#[node-Node3]
+#[node-Node2]
 #host = 127.0.0.1
-#ssh_user = mongosuite
-#mongod_bin =     ~/bin/mongod
-#mongod_shell =   ~/bin/mongo
-
-#[instance-Mongosuite]
-#node = Node3
-#port = 27017
-#mongod_dbpath =  ~/var/lib/mongodb/
-
-[instance-Arbiter]
-node = Node1
-port = 20000
-flags = --nojournal --noprealloc
+#ssh_user = 	mongosuite
+#mongo_dbin =   ~/bin/mongod
+#mongo_shell =  ~/bin/mongo
 
 [instance-MyDB1]
 node = Node1
@@ -43,9 +31,18 @@ port = 20001
 flags = --nojournal --noprealloc
 
 [instance-MyDB2]
-node = Node2
+node = Node1
 port = 20002
 flags = --nojournal --noprealloc
+
+[instance-MyDB3]
+node = Node1
+port = 20003
+flags = --nojournal --noprealloc
+
+[replSet-rs_test]
+members = MyDB1, MyDB2, MyDB3
+#arbiters = MyDB3
 	"""
 
 	conf_file = open(path, 'w')
@@ -118,4 +115,7 @@ def cprint(col1, col2=None, colchar=20):
 		col1 = str(col1)
 		col2 = str(col2)
 		space = colchar - len(col1)
+		if space <= 0:
+			space = 1
+
 		print(col1 + " "*space + col2)
