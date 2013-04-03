@@ -30,13 +30,16 @@ pip install git+https://github.com/william-p/mongoSuite.git
 
 ```
 Usage:
-  mongoSuite init                         [--verbose]
-  mongoSuite node     list                [--verbose]
-  mongoSuite node     status [<node>]     [--verbose]
-  mongoSuite instance list                [--verbose]
-  mongoSuite instance status [<instance>] [--verbose]
-  mongoSuite instance start  <instance>   [--verbose]
-  mongoSuite instance stop   <instance>   [--verbose]
+  mongoSuite init                                           [--verbose]
+  mongoSuite node     list                                  [--verbose]
+  mongoSuite node     status [<node>]                       [--verbose]
+  mongoSuite instance list                                  [--verbose]
+  mongoSuite instance status [<instance>]                   [--verbose]
+  mongoSuite instance [start|stop|restart|reset] <instance> [--verbose]
+  mongoSuite replSet  list                                  [--verbose]
+  mongoSuite replSet  status [<replSet>]                    [--verbose]
+  mongoSuite replSet  [start|stop|restart] <replSet>        [--verbose]
+  mongoSuite replSet  init   <replSet>                      [--verbose]
   mongoSuite -h | --help
 ```
 
