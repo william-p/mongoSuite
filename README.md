@@ -61,6 +61,10 @@ Now, you can configure `mongoSuite` on `~/mongoSuite/etc/mongoSuite.conf`
 
 `todo`
 
+### Section: [replSet-<NAME>]
+
+`todo`
+
 ## Screenshots
 
 ![Screenshot 01](https://raw.github.com/william-p/mongoSuite/master/screenshots/01.png)
